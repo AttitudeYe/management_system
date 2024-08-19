@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { Tabs } from "antd";
+import { Tabs, message } from "antd";
 
 
 const Login = () => {
@@ -14,14 +14,15 @@ const Login = () => {
     const formData = new FormData(event.currentTarget)
     const username = formData.get('username')
     const password = formData.get('password')
-    
+
     const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
     })
- 
+
     if (response.ok) {
+      message.success('登录成功')
       router.push('/student')
     } else {
       // Handle errors
@@ -105,7 +106,7 @@ const Login = () => {
       <div className="max-w-md w-full p-6">
         <h1 className="text-3xl font-semibold mb-6 text-black text-center">后台管理系统</h1>
         <Tabs
-          defaultActiveKey="logIn"
+          activeKey={tabKey}
           onChange={(key) => setTabKey(key)}
           items={[
             {
@@ -132,8 +133,33 @@ const Login = () => {
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
             <input required type="password" id="password" name="password" className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300" />
           </div>
-          {tabKey === 'logIn' ? <button type="submit" className="w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300">登录</button> :
-          <button type="submit" className="w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300">注册</button>}
+          {tabKey === 'logIn' ? <><button type="submit" className="w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300">登录</button> <p className="
+                            items-center
+                            justify-center
+                            mt-10
+                            text-center text-md text-gray-500
+                        ">
+            <span>还没有账号？</span>
+            <span
+              className="
+                                text-indigo-400
+                                hover:text-blue-500
+                                no-underline
+                                hover:underline
+                                cursor-pointer
+                                transition
+                                ease-in
+                                duration-300
+                            "
+              onClick={() => {
+                setTabKey('signIn')
+              }}
+            >
+              立即注册
+            </span>
+          </p></> :
+            <button type="submit" className="w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300">注册</button>}
+
         </form>
         <div className="mt-4 text-sm text-gray-600 text-center">
         </div>
